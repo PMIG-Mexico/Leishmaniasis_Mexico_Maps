@@ -1,0 +1,2 @@
+load("/Users/Said/Github/Leishmaniasis_Mexico_Maps/df2.Rdata")
+ls()
