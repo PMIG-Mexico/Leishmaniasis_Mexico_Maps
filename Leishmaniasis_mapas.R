@@ -13,6 +13,27 @@ data(mxstate.map, package = "mxmaps")
 data(mxmunicipio.map, package = "mxmaps")
 
 
+mx_municipio<-function(df_mxmunicipio,title){
+	df_mxmunicipio$value[df_mxmunicipio$value==0]<-NA
+user.df<-data.frame(region=df_mxmunicipio$region,
+	value=df_mxmunicipio$value)
+
+final.plot<-left_join(mxmunicipio.map,user.df,by="region")
+
+gg<-ggplot(final.plot, aes(long, lat, group = group)) + 
+        geom_polygon(aes(fill = value), color = "dark grey", 
+            size = 0.1) +
+        #scale_fill_viridis(na.value = "gray96")
+  coord_map()+
+  scale_fill_distiller(name="Casos", palette = "Spectral",na.value = "gray96" )+
+  theme_nothing(legend = TRUE)+
+  labs(title=title)  +
+    geom_polygon(data = mxstate.map, fill = "transparent", color = "black", 
+            size = 0.15)+theme_nothing(legend = TRUE)
+return(gg)
+}
+
+
 #Leishmaniasis in Mexico, 2000
 
 leish.2000<-read.csv("Data/LEIHSMANIASIS-2000.csv")
@@ -75,136 +96,85 @@ df_mxmunicipio[indx.2003_2016,
 
 #Plots
 
-pdf("Data/Leishmaniasis_2000_2016.pdf")
+pdf("Data/Leishmaniasis-V2_2000_2016.pdf")
+
+df_mxmunicipio$value<-df_mxmunicipio$Total
+mx_municipio(df_mxmunicipio,"Cutaneous Leishmaniasis in Mexico")
+
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2000
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2000")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2001
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2001")
-
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2002
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2002")
-
-
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2003
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2003")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2004
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2004")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2005
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2005")
-
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2006
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2006")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2007
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2007")
+mx_municipio_choropleth(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2008
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2008")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2009
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2009")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2010
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2010")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2011
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2011")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2012
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2012")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2013
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2013")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2014
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2014")
+mx_municipio(df_mxmunicipio,  
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2015
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2015")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2016
-mxmunicipio_choropleth(df_mxmunicipio, 
-                       num_colors = 2,
-                       title = "Leishmaniasis in Mexico, 2016")
+mx_municipio(df_mxmunicipio, 
+                       title = "Cutaneous Leishmaniasis in Mexico")
 
 
 dev.off()
 
 
-gg = MXMunicipioChoropleth$new(df_mxmunicipio)
-gg$title <- "Leishmaniasis, 2016"
-gg$set_num_colors(1)
-gg$ggplot_scale <- scale_fill_viridis("percent", labels = percent)
-gg$render()
-
 
 #FUENTE : SUIVE/DGE/Secretaría de Salud/Estados Unidos Mexicanos, 2016.
 #Nota: esta información proviene de la notificación convencional, la cuál es el diagnóstico clínico del médico.
 #información preliminar al corte de la semana epidenmiológica núm. 29 de 2016.
-
-
-
-
-
-
-
-
-df_mxmunicipio$value<-df_mxmunicipio$Total
-df_mxmunicipio$value[df_mxmunicipio$value==0]<-NA
-
-user.df<-data.frame(region=df_mxmunicipio$region,
-	value=df_mxmunicipio$value)
-
-final.plot<-left_join(mxmunicipio.map,user.df,by="region")
-
-gg <- ggplot(final.plot, aes(long, lat, group = group)) + 
-        geom_polygon(aes(fill = value), color = "dark grey", 
-            size = 0.1) +
-        #scale_fill_viridis(na.value = "gray96")
-  coord_map()+
-  scale_fill_distiller(name="Casos", palette = "Spectral",na.value = "gray96" )+
-  theme_nothing(legend = TRUE)+
-  labs(title="Leishmaniasis")  +
-
-    geom_polygon(data = mxstate.map, fill = "transparent", color = "black", 
-            size = 0.15)+theme_nothing(legend = TRUE)
-gg
