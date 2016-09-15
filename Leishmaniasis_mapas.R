@@ -1,14 +1,21 @@
 #Leishmaniasis Mapas 
 #install.packages("devtools")
 #devtools::install_github("diegovalle/mxmaps")
+#devtools::install_github("sjmgarnier/viridis")
 
 library("mxmaps")
+library("viridis")
+library("scales")
 
 data("df_mxmunicipio")
 
+data(mxstate.map, package = "mxmaps")
+data(mxmunicipio.map, package = "mxmaps")
+
+
 #Leishmaniasis in Mexico, 2000
 
-leish.2000<-read.csv("LEIHSMANIASIS-2000.csv")
+leish.2000<-read.csv("Data/LEIHSMANIASIS-2000.csv")
 
 df_mxmunicipio$leishmaniasis2000<-0
 
@@ -19,7 +26,7 @@ df_mxmunicipio$leishmaniasis2000[indx.2000]<-leish.2000$A2000
 
 #Leishmaniasis in Mexico, 2001
 
-leish.2001<-read.csv("LEIHSMANIASIS-2001.csv")
+leish.2001<-read.csv("Data/LEIHSMANIASIS-2001.csv")
 df_mxmunicipio$leishmaniasis2001<-0
 
 indx.2001<-match(str_mxmunicipio(leish.2001$Num.Entidad,
@@ -29,7 +36,7 @@ df_mxmunicipio$leishmaniasis2001[indx.2001]<-leish.2001$A2001
 
 #Leishmaniasis in Mexico, 2002
 
-leish.2002<-read.csv("LEIHSMANIASIS-2002.csv")
+leish.2002<-read.csv("Data/LEIHSMANIASIS-2002.csv")
 df_mxmunicipio$leishmaniasis2002<-0
 
 indx.2002<-match(str_mxmunicipio(leish.2002$Num.Entidad,
@@ -39,7 +46,7 @@ df_mxmunicipio$leishmaniasis2002[indx.2002]<-leish.2002$A2002
 
 #Leishmaniasis in Mexico, 2003-2016
 
-leish.2003_2016<-read.csv("LEIHSMANIASIS-2003-2016.csv")
+leish.2003_2016<-read.csv("Data/LEIHSMANIASIS-2003-2016.csv")
 
 
 df_mxmunicipio$leishmaniasis2003<-0
@@ -68,7 +75,7 @@ df_mxmunicipio[indx.2003_2016,
 
 #Plots
 
-pdf("Leishmaniasis_2000_2016.pdf")
+pdf("Data/Leishmaniasis_2000_2016.pdf")
 
 df_mxmunicipio$value <-  df_mxmunicipio$leishmaniasis2000
 mxmunicipio_choropleth(df_mxmunicipio, 
@@ -162,8 +169,42 @@ mxmunicipio_choropleth(df_mxmunicipio,
 
 dev.off()
 
+
+gg = MXMunicipioChoropleth$new(df_mxmunicipio)
+gg$title <- "Leishmaniasis, 2016"
+gg$set_num_colors(1)
+gg$ggplot_scale <- scale_fill_viridis("percent", labels = percent)
+gg$render()
+
+
 #FUENTE : SUIVE/DGE/Secretaría de Salud/Estados Unidos Mexicanos, 2016.
 #Nota: esta información proviene de la notificación convencional, la cuál es el diagnóstico clínico del médico.
 #información preliminar al corte de la semana epidenmiológica núm. 29 de 2016.
 
 
+
+
+
+
+
+
+df_mxmunicipio$value<-df_mxmunicipio$Total
+df_mxmunicipio$value[df_mxmunicipio$value==0]<-NA
+
+user.df<-data.frame(region=df_mxmunicipio$region,
+	value=df_mxmunicipio$value)
+
+final.plot<-left_join(mxmunicipio.map,user.df,by="region")
+
+gg <- ggplot(final.plot, aes(long, lat, group = group)) + 
+        geom_polygon(aes(fill = value), color = "dark grey", 
+            size = 0.1) +
+        #scale_fill_viridis(na.value = "gray96")
+  coord_map()+
+  scale_fill_distiller(name="Casos", palette = "Spectral",na.value = "gray96" )+
+  theme_nothing(legend = TRUE)+
+  labs(title="Leishmaniasis")  +
+
+    geom_polygon(data = mxstate.map, fill = "transparent", color = "black", 
+            size = 0.15)+theme_nothing(legend = TRUE)
+gg
